@@ -1,0 +1,17 @@
+{
+  "name": "team-finder-app",
+  "version": "1.0.0",
+  "description": "This app will help hackers find a team for hackathons",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --exit"
+  },
+  "author": "Eddie Chu",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "express": "^4.16.4",
+    "mocha": "^5.2.0"
+  }
+}
