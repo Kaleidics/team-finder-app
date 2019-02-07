@@ -1,2 +1,10 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  edge: true
+  api_key:
+    secure: NHLNYefukXdCqWBVGdKoBIcUqyYhzbWds+eMDU0/mdEi8af0dwUqmxK8Viyt8hdbtTO/Rvo4/qcBUvjJiNdiQ/WZAhfqa6K86iLoVWxl3nbeUH1kPV+sKI9CrLnOn6SgX/83IXK1oJxKRvuKD40ar7g0xPxzHS5UknW1/5nZvSepcF98mQpD/HoakkPMjD6VwkMzhaxYqX7rcJaqF205RVoxl9/QbqFkHSxGgHc4BKgW1eKPR97GHTo686ftxnhncyaVkiZjDNuj9oBwP6gwoeQIkH1x6BK3UTcw93WKm3NXc2AUFMMpRDJt1CYyAJBofiv0OSGbrYUr+CGjs9H1tvwDyuohTIwacmhoEqa+DxnbS4RmCPCEWNM7Yd+L0kd3hquvg/PFozVGb7v0YgqNhvqmUcljjLIhAjjjdIG9wibS6kA2+07rgmJLj/kncYXNrtKSLh+gVFqw66CydhqRwCsb/SdZT3Y+RIQtOmMWAtjhaWOhqL3aYMgWHXkE9DmK9wnwp9mv+5NA7/tLP4tR72xYhOagGQG0/a90PtfPWcA6LPFp8rhuAZmyLwnXTgCkSV1UzmvUGY1YLaB/8mEcx0ZDpKqQQvuXobADmMTBVOllEoDZ1EUq4D24pDkOMH5kPKU2HN1uy/ZX/IaS07UP/RKSuGZA5TubgksfDBnpGvE=
+  app: whispering-escarpment-34402
+  on:
+    repo: Kaleidics/team-finder-app
