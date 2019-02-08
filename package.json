@@ -1,7 +1,7 @@
 {
   "name": "team-finder-app",
   "version": "1.0.0",
-  "description": "This app will help hackers find a team for hackathons",
+  "description": "This app will help a team for",
   "main": "server.js",
   "scripts": {
     "test": "mocha --exit"
@@ -12,6 +12,8 @@
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "express": "^4.16.4",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "mongoose": "^5.4.10",
+    "uuid": "^3.3.2"
   }
 }
