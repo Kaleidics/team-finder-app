@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const userSchema = mongoose.Schema({
+const playerSchema = mongoose.Schema({
     firstName: String,
     lastName: String,
     userName: {
@@ -13,13 +13,13 @@ const userSchema = mongoose.Schema({
 
     //where the array will contain instances of postsSchema, how to point to postsSchema?
     //{type: mongoose.Schema.Types.ObjectId, ref: 'Post'} correct?
-    teams: []
+    teams: [ {type: mongoose.Schema.Types.ObjectId, ref:'Team'}]
 });
 
-const postSchema = mongoose.Schema({
+const teamSchema = mongoose.Schema({
     members: {
-        creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        joiners: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+        creator: {type: mongoose.Schema.Types.ObjectId, ref: 'Player'},
+        joiners: {type: mongoose.Schema.Types.ObjectId, ref: 'Player'}
     },
     sport: String,
     title: String,
@@ -32,7 +32,7 @@ const postSchema = mongoose.Schema({
 
 });
 
-var User = mongoose.model('User', userSchema);
-var Post = mongoose.model('Post', postSchema);
+var Player = mongoose.model('Player', playerSchema);
+var Team = mongoose.model('Team', teamSchema);
 
-module.exports = {User, Post};
+module.exports = {Player, Team};
