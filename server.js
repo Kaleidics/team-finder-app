@@ -5,7 +5,7 @@ const express = require('express');
 const mongoose = require("mongoose");
 
 //config.js controls constants for entire app
-const {PORT, DATABSE_URL} = require('./config');
+const {PORT, DATABASE_URL} = require('./config');
 
 //use es6 promises
 mongoose.Promise = global.Promise;
