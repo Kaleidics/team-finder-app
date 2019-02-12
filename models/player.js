@@ -10,9 +10,10 @@ const playerSchema = mongoose.Schema({
         unique: true,
         required: true
     },
-
-    //where the array will contain instances of postsSchema, how to point to postsSchema?
-    //{type: mongoose.Schema.Types.ObjectId, ref: 'Post'} correct?
+    password: {
+        type: String,
+        required: true
+    },
     teams: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Team' }]
 });
 
