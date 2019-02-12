@@ -24,50 +24,47 @@ router.post('/register', (req, res) => {
         .then(player => {
             if(player) {
                 console.log('Username already exists');
-                return res.status(400).json({
-                    message: 'Username already exists'
-                })
+                // return res.status(400).json({
+                //     message: 'Username already exists'
+                // })
             }
-        });
+        })
+        .catch(err => res.status(500).json({ message: "Something went wrong" }))
     //hash user password input, persist user to database
     bcrypt.hash(req.body.password, 10, function(err, hash) {
+        if (err) {
+            console.error(`Error: ${err}`);
+            return res.status(400).json({error: err});
+        }
+        console.log(hash);
+
         Player
             .create({
                 userName: req.body.userName,
                 password: hash
-            }, function (err, player) {
+            }, 
+            function (err, player) {
                 if (err) {
                     //todo = implement error case
                     return res.status(400).json({
                         message: 'something went wrong'
                     });
                 }
-                console.log('it worked', player);
-                return res.status(201).json({
-                    message: 'something went wrong'
+                else {
+                    console.log('it worked', player);
+                    return res.status(201).json({
+                    message: 'success'
                 })
-
+                
+                }
             });
-    })
-    .catch(err => res.status(500).json({ message: "Cannot register user"}))
-    // Player
-    //     .create({
-    //         userName: req.body.userName,
-    //         password: req.body.password
-    //     }, function(err, player) {
-    //         if(err) {
-    //             //todo = implement error case
-    //             return res.send(400, `failed to create user`);
-    //         }
-    //         console.log('it worked', player);
-    //         return res.send(201, `created`)
-
-    //     });
+    });
 });
+
 
 router.post('/login', (req, res) => {
     //check if user is in the database/registered
-    Player.findOne({req.body.userName})
+    Player.findOne({userName: req.body.userName})
         .then(player => {
             if(!player) {
                 return res.status(404).json({
@@ -82,18 +79,29 @@ router.post('/login', (req, res) => {
                         lastName: player.lastName,
                         userName: player.userName
                     }
-                }
-            jwt.sign(payload, 'secret', {expiresIn: 1000}, (err, token){
-                if (err) {
-                    console.error(`Token has error: ${err}`);
-                }
-                else {
-                    res.json({
-                        success: true,
-                        token: `Bearer ${token}`
+                    jwt.sign(payload, 'secret', { expiresIn: 1000 }, (err, token) => {
+                        if (err) {
+                            console.error(`Token has error: ${err}`);
+                        }
+                        else {
+                            res.json({
+                                success: true,
+                                token: token
+                            });
+                        }
                     });
                 }
-            });
+            // jwt.sign(payload, 'secret', {expiresIn: 1000}, (err, token) => {
+            //     if (err) {
+            //         console.error(`Token has error: ${err}`);
+            //     }
+            //     else {
+            //         res.json({
+            //             success: true,
+            //             token: `Bearer ${token}`
+            //         });
+            //     }
+            // });
             });
     })
     .catch(err => res.status(500).json({message: 'Failed to login'}));
