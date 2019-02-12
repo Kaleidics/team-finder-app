@@ -1,8 +1,8 @@
-
 'use strict';
 
 const express = require('express');
 const mongoose = require("mongoose");
+const users = require('./routes/users');
 
 //config.js controls constants for entire app
 const {PORT, DATABASE_URL} = require('./config');
@@ -15,7 +15,7 @@ mongoose.Promise = global.Promise;
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
-
+app.use(users);
 
 //runServer and closeServer are needed to reset between unit tests
 //closeServer need access to a server object, but that is only created when
