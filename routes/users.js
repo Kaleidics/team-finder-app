@@ -20,17 +20,15 @@ router.post('/register', (req, res) => {
 
     Player.findOne({
         userName: req.body.userName
-    })
+        })
         .then(player => {
             if(player) {
                 console.log('Username already exists');
                 return res.status(400).json({
-                    register: 'Username already exists'
+                    message: 'Username already exists'
                 })
             }
-        })
-
-
+        });
     //hash user password input, persist user to database
     bcrypt.hash(req.body.password, 10, function(err, hash) {
         Player
@@ -41,16 +39,17 @@ router.post('/register', (req, res) => {
                 if (err) {
                     //todo = implement error case
                     return res.status(400).json({
-                        register: 'something went wrong'
+                        message: 'something went wrong'
                     });
                 }
                 console.log('it worked', player);
                 return res.status(201).json({
-                    register: 'something went wrong'
+                    message: 'something went wrong'
                 })
 
             });
-    });
+    })
+    .catch(err => res.status(500).json({ message: "Cannot register user"}))
     // Player
     //     .create({
     //         userName: req.body.userName,
