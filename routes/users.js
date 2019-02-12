@@ -65,4 +65,38 @@ router.post('/register', (req, res) => {
     //     });
 });
 
+router.post('/login', (req, res) => {
+    //check if user is in the database/registered
+    Player.findOne({req.body.userName})
+        .then(player => {
+            if(!player) {
+                return res.status(404).json({
+                    message: 'User not found'
+                });
+            }
+            bcrypt.compare(req.body.password, player.password)
+            .then(isMatch => {
+                if(isMatch) {
+                    const payload = {
+                        firstName: player.firstName,
+                        lastName: player.lastName,
+                        userName: player.userName
+                    }
+                }
+            jwt.sign(payload, 'secret', {expiresIn: 1000}, (err, token){
+                if (err) {
+                    console.error(`Token has error: ${err}`);
+                }
+                else {
+                    res.json({
+                        success: true,
+                        token: `Bearer ${token}`
+                    });
+                }
+            });
+            });
+    })
+    .catch(err => res.status(500).json({message: 'Failed to login'}));
+
+});
 module.exports = router;
