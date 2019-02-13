@@ -91,6 +91,11 @@ router.post('/login', (req, res) => {
                         }
                     });
                 }
+                else {
+                    return res.status(401).json({
+                        message: 'Wrong Username or password'
+                    });
+                }
             // jwt.sign(payload, 'secret', {expiresIn: 1000}, (err, token) => {
             //     if (err) {
             //         console.error(`Token has error: ${err}`);
@@ -107,4 +112,6 @@ router.post('/login', (req, res) => {
     .catch(err => res.status(500).json({message: 'Failed to login'}));
 
 });
+
+router.get('/playerprofile', passport.authenticate('jwt', {session: false}))
 module.exports = router;
