@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const passport = require('passport');
 
 //config.js controls constants for entire app
-const {PORT, DATABASE_URL} = require('./config');
+const {PORT, DATABASE_URL} = require('./config/config');
 
 //use es6 promises
 mongoose.Promise = global.Promise;
@@ -17,7 +17,7 @@ mongoose.Promise = global.Promise;
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
-app.use(users);
+
 //logging
 app.use(morgan('common'));
 //CORS
@@ -30,6 +30,7 @@ app.use(function (req, res, next) {
     }
     next();
 });
+app.use(users);
 //runServer and closeServer are needed to reset between unit tests
 //closeServer need access to a server object, but that is only created when
 // runServer runs, so declared as global scope
