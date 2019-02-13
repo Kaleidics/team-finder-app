@@ -3,6 +3,8 @@
 const express = require('express');
 const mongoose = require("mongoose");
 const users = require('./routes/users');
+const morgan = require('morgan');
+const passport = require('passport');
 
 //config.js controls constants for entire app
 const {PORT, DATABASE_URL} = require('./config');
@@ -16,6 +18,8 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(users);
+//logging
+app.use(morgan('common'));
 //CORS
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
