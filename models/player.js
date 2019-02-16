@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const playerSchema = mongoose.Schema({
-    firstName: String,
-    lastName: String,
+    fullName: String,
     userName: {
         type: String,
         unique: true,

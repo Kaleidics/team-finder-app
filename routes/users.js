@@ -29,7 +29,7 @@ router.post('/register', (req, res) => {
                 // })
             }
         })
-        .catch(err => res.status(500).json({ message: "Something went wrong" }))
+        .catch(err => res.status(500).json({ message: "Username already exists" }))
     //hash user password input, persist user to database
     bcrypt.hash(req.body.password, 10, function(err, hash) {
         if (err) {
@@ -47,7 +47,7 @@ router.post('/register', (req, res) => {
                 if (err) {
                     //todo = implement error case
                     return res.status(400).json({
-                        message: 'something went wrong'
+                        message: 'something went wrong here'
                     });
                 }
                 else {
@@ -85,6 +85,7 @@ router.post('/login', (req, res) => {
                         }
                         else {
                             res.json({
+                                id: player,
                                 success: true,
                                 token: token
                             });
@@ -96,22 +97,47 @@ router.post('/login', (req, res) => {
                         message: 'Wrong Username or password'
                     });
                 }
-            // jwt.sign(payload, 'secret', {expiresIn: 1000}, (err, token) => {
-            //     if (err) {
-            //         console.error(`Token has error: ${err}`);
-            //     }
-            //     else {
-            //         res.json({
-            //             success: true,
-            //             token: `Bearer ${token}`
-            //         });
-            //     }
-            // });
             });
     })
     .catch(err => res.status(500).json({message: 'Failed to login'}));
 
 });
 
-router.get('/playerprofile', passport.authenticate('jwt', {session: false}))
+// router.get('/profile/:id', passport.authenticate('jwt', {session: false}))
+router.post('/profile/:id', verifyToken, (req, res) => {
+    jwt.verify(req.token, 'secret', (err, authData) => {
+        if(err) {
+            res.status(403);
+        }
+        else {
+            res.json({
+                id: req.params.id,
+                message: 'made it to profile',
+                authData: authData
+            });
+        }
+    })
+
+});
+
+// format of token
+//Authorization: Bearer <access_token>
+//verify token
+function verifyToken(req, res, next) {
+    //get auth header value
+    const bearerHeader = req.headers['authorization'];
+    //check if bearer is undefinfed
+    if(typeof bearerHeader !== 'undefined') {
+        //split at space
+        const bearer = bearerHeader.split('');
+        //get token from array
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    } else {
+        //forbidden
+        return res.status(403);
+    }
+}
+
 module.exports = router;
