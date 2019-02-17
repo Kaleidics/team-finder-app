@@ -103,13 +103,17 @@ router.post('/login', (req, res) => {
 
 });
 
+
+
 // router.get('/profile/:id', passport.authenticate('jwt', {session: false}))
-router.post('/profile/:id', verifyToken, (req, res) => {
+router.get('/profile/:id', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secret', (err, authData) => {
         if(err) {
-            res.status(403);
+            console.log('in if');
+            res.sendStatus(403);
         }
         else {
+            console.log('in else');
             res.json({
                 id: req.params.id,
                 message: 'made it to profile',
@@ -126,13 +130,15 @@ router.post('/profile/:id', verifyToken, (req, res) => {
 function verifyToken(req, res, next) {
     //get auth header value
     const bearerHeader = req.headers['authorization'];
+    console.log(bearerHeader);
     //check if bearer is undefinfed
     if(typeof bearerHeader !== 'undefined') {
         //split at space
-        const bearer = bearerHeader.split('');
+        const bearer = bearerHeader.split(' ');
         //get token from array
         const bearerToken = bearer[1];
         req.token = bearerToken;
+        console.log(req.token);
         next();
     } else {
         //forbidden
