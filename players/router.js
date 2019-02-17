@@ -89,6 +89,7 @@ router.post('/register', (req, res) => {
             //if there is no existing user, hash the password
             return Player.hashPassword(password);
         })
+        //then pass hash password and persist new user
         .then(hash => {
             return Player.create({
                 userName,
