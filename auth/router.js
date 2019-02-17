@@ -17,3 +17,5 @@ const createAuthToken = function(user) {
 
 const localAuth = passport.authenticate('local', {session: false});
 
+
+module.exports = {router};

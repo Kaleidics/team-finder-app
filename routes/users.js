@@ -85,7 +85,7 @@ router.post('/login', (req, res) => {
                         }
                         else {
                             res.json({
-                                id: player,
+                                id: player.id,
                                 success: true,
                                 token: token
                             });
@@ -107,6 +107,7 @@ router.post('/login', (req, res) => {
 
 // router.get('/profile/:id', passport.authenticate('jwt', {session: false}))
 router.get('/profile/:id', verifyToken, (req, res) => {
+    console.log('in profile');
     jwt.verify(req.token, 'secret', (err, authData) => {
         if(err) {
             console.log('in if');
@@ -114,14 +115,22 @@ router.get('/profile/:id', verifyToken, (req, res) => {
         }
         else {
             console.log('in else');
-            res.json({
-                id: req.params.id,
-                message: 'made it to profile',
-                authData: authData
-            });
+            Player.findOne({_id: req.params.id})
+                .then(player => {
+                    if (!player) {
+                        return res.status(404).json({
+                            message: 'something went wrong'
+                        });
+                    }
+                    else {
+                        console.log('sent')
+                    res.json({
+                        teams: player.teams
+                    })
+                }
+                })
         }
     })
-
 });
 
 // format of token

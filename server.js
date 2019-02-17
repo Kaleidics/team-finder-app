@@ -1,25 +1,25 @@
 'use strict';
-
+require('dotenv').config(); 
 const express = require('express');
 const mongoose = require("mongoose");
 const users = require('./routes/users');
 const morgan = require('morgan');
 const passport = require('passport');
 
+const {router: usersRouter } = require('./users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth')
 //config.js controls constants for entire app
-const {PORT, DATABASE_URL} = require('./config/config');
 
 //use es6 promises
 mongoose.Promise = global.Promise;
 
-
+const { PORT, DATABASE_URL } = require('./config/config');
 
 const app = express();
-app.use(express.static('public'));
-app.use(express.json());
 
 //logging
 app.use(morgan('common'));
+
 //CORS
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -30,7 +30,12 @@ app.use(function (req, res, next) {
     }
     next();
 });
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 app.use(users);
+app.use('/')
 //runServer and closeServer are needed to reset between unit tests
 //closeServer need access to a server object, but that is only created when
 // runServer runs, so declared as global scope
