@@ -71,6 +71,25 @@ router.post('/register', (req, res) => {
         });
     }
 
+    //finish input checks, now persist to db
+    let {userName, password, fullName = ''} = req.body;
+    //userName and password already checked for trim
+    //trim non-crediential name has no side effect
+    fullName = fullName.trim();
+    //check for existing user
+    return Player.findOne({userName})
+        .then(player => {
+            if(player) {
+                console.log('username already exists');
+                return Promise.reject({
+                    status: 422,
+                    message: 'Username already taken'
+                });
+            }
+            //if there is no existing user, hash the password
+            return Player.hashPassword(password);
+        })
+        .then()
 
 
 })
