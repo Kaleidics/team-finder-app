@@ -89,7 +89,17 @@ router.post('/register', (req, res) => {
             //if there is no existing user, hash the password
             return Player.hashPassword(password);
         })
-        .then()
-
-
-})
+        .then(hash => {
+            return Player.create({
+                userName,
+                password: hash,
+                fullName
+            });
+        })
+        .then(player => {
+            return res.sendStatus(201).json(player.serialize());
+        })
+        .catch(err => {
+            res.sendStatus(500).json({message: 'Internal server error'});
+        });
+});
