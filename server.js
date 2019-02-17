@@ -2,12 +2,16 @@
 // require('dotenv').config(); 
 const express = require('express');
 const mongoose = require("mongoose");
-const users = require('./routes/users');
+// const users = require('./routes/users');
 const morgan = require('morgan');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
-const {router: usersRouter } = require('./users');
-const { router: authRouter, localStrategy, jwtStrategy } = require('./auth')
+
+// Here we use destructuring assignment with renaming so the two variables
+// called router (from ./players and ./auth) have different names
+const {router: playersRouter } = require('./players');
+// const { router: authRouter, localStrategy, jwtStrategy } = require('./auth')
 //config.js controls constants for entire app
 
 //use es6 promises
@@ -20,6 +24,10 @@ const app = express();
 //logging
 app.use(morgan('common'));
 
+//parse application/json
+app.use(bodyParser.json())
+
+
 //CORS
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -31,12 +39,13 @@ app.use(function (req, res, next) {
     next();
 });
 
-passport.use(localStrategy);
-passport.use(jwtStrategy);
+// passport.use(localStrategy);
+// passport.use(jwtStrategy);
 
-app.use('/api/players/');
-app.use('/api/teams');
-app.use('/api/auth/');
+app.use('/api/players/', playersRouter);
+// app.use('/api/teams');
+// app.use('/api/auth/');
+
 //runServer and closeServer are needed to reset between unit tests
 //closeServer need access to a server object, but that is only created when
 // runServer runs, so declared as global scope
