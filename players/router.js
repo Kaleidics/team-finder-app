@@ -36,16 +36,16 @@ console.log('made it past first check');
     //check if trimmed field is same as original field
     const trimFields = ['userName', 'password'];
     const nonTrim = trimFields.find(
-        field => req.body[field].trim !== req.body[field]
+        field => req.body[field].trim() !== req.body[field]
     );
 console.log('made it to 1.1')//failing
     //if trimmed field is not same as original field
     if(nonTrim) {
-        // return res.sendStatus(422).json({
-        //     status: 422,
-        //     message: 'Cannot start or end with whitespace',
-        //     location: nonTrim
-        // });
+        return res.status(422).json({
+            status: 422,
+            message: 'Cannot start or end with whitespace',
+            location: nonTrim
+        });
     }
 console.log('made it to 1.5');
     const limitFields = {
@@ -70,12 +70,12 @@ console.log('made it to 2.2');
 console.log('made it to 2.3');//failing
     //return an error if either cases are true
     if(tooSmallField || tooLargeField) {
-        // return res.sendStatus(422).json({
-        //     status: 422,
-        //     reason: 'Validation Error',
-        //     message: tooSmallField ? `Must be at least ${limitFields[tooSmallField].min} characters long`: `Must be at most ${limitFields[tooLargeField].max} characters long`,
-        //     location: tooSmallField || tooLargeField
-        // });
+        return res.status(422).json({
+            status: 422,
+            reason: 'Validation Error',
+            message: tooSmallField ? `Must be at least ${limitFields[tooSmallField].min} characters long`: `Must be at most ${limitFields[tooLargeField].max} characters long`,
+            location: tooSmallField || tooLargeField
+        });
     }
 console.log('made it past 2nd check');
     //finish input checks, now persist to db
@@ -88,16 +88,18 @@ console.log('made it past 2nd check');
         .then(player => {
             if(player) {
                 console.log('username already exists');
-                return Promise.reject({
+                return res.status(422).json({
                     status: 422,
                     message: 'Username already taken'
                 });
             }
             //if there is no existing user, hash the password
+            console.log('hashing password');
             return Player.hashPassword(password);
         })
         //then pass hash password and persist new user
         .then(hash => {
+console.log('passed all tests, start persist'); //still running even though should have exited on like 98?
             return Player.create({
                 userName,
                 password: hash,
