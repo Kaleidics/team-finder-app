@@ -1,5 +1,5 @@
 'use strict';
-require('dotenv').config(); 
+// require('dotenv').config(); 
 const express = require('express');
 const mongoose = require("mongoose");
 const users = require('./routes/users');
@@ -34,8 +34,9 @@ app.use(function (req, res, next) {
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.use(users);
-app.use('/')
+app.use('/api/players/');
+app.use('/api/teams');
+app.use('/api/auth/');
 //runServer and closeServer are needed to reset between unit tests
 //closeServer need access to a server object, but that is only created when
 // runServer runs, so declared as global scope
