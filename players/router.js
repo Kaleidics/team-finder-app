@@ -41,9 +41,36 @@ router.post('/register', (req, res) => {
             status: 422,
             message: 'Cannot start or end with whitespace',
             location: nonTrim
-        })
+        });
     }
-    
+
+    const limitFields = {
+        userName: {
+            min: 3
+        },
+        password: {
+            min: 6,
+            max: 72
+        }
+    }
+    //see if true: user input field is less than three or six
+    const tooSmallField = Object.keys(limitFields).find(
+        field => 'min' in limitFields[field] && req.body[field].trim().length < limitFields[field].min
+    );
+    //see if true: user input field is greater than 72
+    const tooLargeField = object.keys(limitFields).find(
+        field => 'max' in limitFields[field] && req.body[field].trim().length > limitFields[field].max
+    );
+    //return an error if either cases are true
+    if(tooSmallField || tooLargeField) {
+        return res.sendStatus(422).json({
+            status: 422,
+            reason: 'Validation Error',
+            message: tooSmallField ? `Must be at least ${limitFields[tooSmallField].min} characters long`: `Must be at most ${limitFields[tooLargeField].max} characters long`,
+            location: tooSmallField || tooLargeField
+        });
+    }
+
 
 
 })
